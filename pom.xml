@@ -4,9 +4,31 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jenson.ajie</groupId>
+    <groupId>jenson</groupId>
     <artifactId>JTool</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>github</id>
+            <name>Jenson-F</name>
+            <url>https://github.com/Jenson-F/JTool</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Jenson-F/JTool</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -42,5 +64,4 @@
             <version>3.10.0</version>
         </dependency>
     </dependencies>
-
 </project>
