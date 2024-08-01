@@ -9,7 +9,7 @@ import java.util.*;
 @ToString
 public class HttpBodys {
 
-    Map<String, Object> body;
+    Map<String, Object> body = new HashMap<>();
 
     public HttpBodys add(String key,Object value){
         if (Objects.isNull(key)) {

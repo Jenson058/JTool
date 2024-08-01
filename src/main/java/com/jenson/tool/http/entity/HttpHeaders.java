@@ -10,7 +10,7 @@ import java.util.*;
 @ToString
 public class HttpHeaders {
 
-    Map<String,String> header;
+    Map<String,String> header = new HashMap<>();
 
     public HttpHeaders add(String key,String value){
         if (Objects.isNull(key)) {

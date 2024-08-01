@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 @Getter
 @Accessors(chain = true)
@@ -45,7 +46,7 @@ public class HttpRequest {
     private final static String GET = "GET";
     private final static String POST = "POST";
 
-    public HttpResponse get() {
+    public void before(String method) {
         try {
             URL u = new URL(url);
 
@@ -55,95 +56,92 @@ public class HttpRequest {
             connection.setReadTimeout(readTimeout);
             connection.setRequestProperty("Content-Type", "application/json; charset=utf-8;");
 
-            headers.getHeader()
-                    .forEach((key, value) -> {
-                        connection.setRequestProperty(key, value);
-                    });
+            if (Objects.nonNull(headers.getHeader())) {
+                headers.getHeader()
+                        .forEach((key, value) -> {
+                            connection.setRequestProperty(key, value);
+                        });
+            }
 
-            connection.connect();
+        } catch (IOException e) {
+            e.printStackTrace();
+            close();
+        }
 
+    }
+
+    public void execute() {
+        try {
             inputStream = connection.getInputStream();
             bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
-            httpResponse.setBufferedReader(bufferedReader);
+            StringBuilder sb = new StringBuilder();
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+
+            httpResponse.setBody(sb.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            close();
+        }
+    }
+
+    public HttpResponse get() {
+        before(GET);
+        try {
+            connection.connect();
+            execute();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (connection != null) {
-                connection.disconnect();
-            }
+            close();
         }
         return httpResponse;
     }
 
-    public HttpResponse post() throws IOException {
+    public HttpResponse post() {
 
+        before(POST);
         try {
-            URL u = new URL(url);
-
-            connection = (HttpURLConnection) u.openConnection();
-            connection.setRequestMethod(POST);
-            connection.setConnectTimeout(connectTimeout);
-            connection.setReadTimeout(readTimeout);
-            connection.setRequestProperty("Content-Type", "application/json; charset=utf-8;");
-
-            headers.getHeader()
-                    .forEach((key, value) -> {
-                        connection.setRequestProperty(key, value);
-                    });
-
-            connection.connect();
-
-            String body = new Gson().toJson(bodys);
 
             //设置成true，向远程服务器写数据
-            connection.setDoOutput(true);//默认是false，无法写入body
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(body.getBytes());
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.
+                    setRequestProperty("Accept", "application/json");
+            String body = new Gson().toJson(bodys);
+            OutputStreamWriter outputStream = new OutputStreamWriter(connection.getOutputStream());
+            outputStream.write(body);
             outputStream.flush();
             outputStream.close();
 
-            inputStream = connection.getInputStream();
-            bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-
-            httpResponse.setBufferedReader(bufferedReader);
+            connection.connect();
+            execute();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (connection != null) {
-                connection.disconnect();
-            }
+            close();
         }
         return httpResponse;
 
+    }
+
+    public void close() {
+        try {
+            if (Objects.nonNull(connection)) {
+                connection.disconnect();
+            }
+            if (Objects.nonNull(bufferedReader)) {
+                bufferedReader.close();
+            }
+            if (Objects.nonNull(inputStream)) {
+                inputStream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

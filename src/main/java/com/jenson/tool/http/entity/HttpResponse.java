@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 @Setter
 public class HttpResponse {
 
-    private BufferedReader bufferedReader;
+    private String body;
 
     private HttpRequest httpRequest;
 
@@ -21,19 +21,7 @@ public class HttpResponse {
         this.httpRequest = httpRequest;
     }
 
-    public <T> T body(Class<T> classOfT) {
-
-        StringBuilder sb = new StringBuilder();
-        String line;
-        try {
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        return new Gson().fromJson(sb.toString(), classOfT);
+    public String body() {
+        return body;
     }
 }
