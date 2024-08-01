@@ -1,4 +1,4 @@
-package com.jenson.ajie.util.data;
+package com.jenson.tool.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

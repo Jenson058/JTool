@@ -1,4 +1,4 @@
-package com.jenson.ajie.util.http;
+package com.jenson.tool.http.auth;
 
 
 import lombok.Getter;
