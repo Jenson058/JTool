@@ -4,10 +4,6 @@ import com.jenson.tool.http.entity.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 @Getter
 @Setter
 public class Post extends SuperHttp {
@@ -21,9 +17,8 @@ public class Post extends SuperHttp {
     }
 
     @Override
-    public Post addHeader(String key, String value) {
+    public void addHeader(String key, String value) {
         super.addHeader(key, value);
-        return this;
     }
 
     public Post addBody(String key,Object value) {

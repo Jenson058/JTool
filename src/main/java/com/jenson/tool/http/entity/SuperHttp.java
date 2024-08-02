@@ -3,15 +3,23 @@ package com.jenson.tool.http.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-
+/**
+ * 通用Http父类
+ *
+ * <p>@author Jenson </p>
+ * <p>@date 2024-08-02 </p>
+ */
 @Getter
 public abstract class SuperHttp {
 
+    /**
+     * 请求链接
+     */
     private final String url;
 
+    /**
+     * 请求头
+     */
     @Setter
     private HttpHeaders headers = new HttpHeaders();
 
@@ -19,8 +27,13 @@ public abstract class SuperHttp {
         this.url = url;
     }
 
-    public SuperHttp addHeader(String key, String value) {
+    /**
+     * 增加请求头信息
+     *
+     * @param key key
+     * @param value value
+     */
+    public void addHeader(String key, String value) {
         headers.add(key, value);
-        return this;
     }
 }

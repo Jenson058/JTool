@@ -32,13 +32,13 @@ public class HttpRequest {
     private Integer readTimeout = 500;
 
     @Setter
-    private HttpHeaders headers;
+    private HttpHeaders headers = new HttpHeaders();
 
     @Setter
-    private HttpBodys bodys;
+    private HttpBodys bodys = new HttpBodys();
 
     @Setter
-    private HttpForms forms;
+    private HttpForms forms = new HttpForms();
 
     private final HttpResponse httpResponse = new HttpResponse(this);
 
