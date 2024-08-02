@@ -35,6 +35,7 @@ public class HttpResponse {
 
     /**
      * 返回请求体字符串
+     *
      * @return body
      */
     public String body() {
@@ -45,26 +46,21 @@ public class HttpResponse {
      * 返回请求体对象
      *
      * @param tClass class
-     * @param <T> 需要返回对象的类型
+     * @param <T>    需要返回对象的类型
      * @return body as object
      */
     public <T> T body(Class<T> tClass) {
-        return new Gson().fromJson(body,tClass);
+        return new Gson().fromJson(body, tClass);
     }
 
     /**
-     *  返回请求体对象一般用于枚举类型
-     *
-     * <p>
-     * 使用方法:
-     * httpResponse.body(new TypeToken<你需要的枚举类型>(){})
-     * </p>
+     * 返回请求体对象一般用于枚举类型
      *
      * @param typeToken 枚举对象容器
-     * @param <T> 枚举对象
+     * @param <T>       枚举对象
      * @return body as object
      */
     public <T> T body(TypeToken<?> typeToken) {
-        return new Gson().fromJson(body,typeToken.getType());
+        return new Gson().fromJson(body, typeToken.getType());
     }
 }

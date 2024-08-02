@@ -72,7 +72,16 @@ public class HttpRequest {
 
     public void execute() {
         try {
-            inputStream = connection.getInputStream();
+            connection.connect();
+
+            if (Objects.equals(connection.getResponseCode(), HttpURLConnection.HTTP_OK)
+                    || Objects.equals(connection.getResponseCode(), HttpURLConnection.HTTP_CREATED)
+                    || Objects.equals(connection.getResponseCode(), HttpURLConnection.HTTP_ACCEPTED)) {
+                inputStream = connection.getErrorStream();
+            } else {
+                inputStream = connection.getInputStream();
+            }
+
             bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
             StringBuilder sb = new StringBuilder();
@@ -85,20 +94,14 @@ public class HttpRequest {
             httpResponse.setBody(sb.toString());
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
             close();
         }
     }
 
     public HttpResponse get() {
         before(GET);
-        try {
-            connection.connect();
-            execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            close();
-        }
+        execute();
         return httpResponse;
     }
 
@@ -118,7 +121,6 @@ public class HttpRequest {
             outputStream.flush();
             outputStream.close();
 
-            connection.connect();
             execute();
         } catch (IOException e) {
             e.printStackTrace();
