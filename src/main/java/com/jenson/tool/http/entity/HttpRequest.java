@@ -74,9 +74,7 @@ public class HttpRequest {
         try {
             connection.connect();
 
-            if (Objects.equals(connection.getResponseCode(), HttpURLConnection.HTTP_OK)
-                    || Objects.equals(connection.getResponseCode(), HttpURLConnection.HTTP_CREATED)
-                    || Objects.equals(connection.getResponseCode(), HttpURLConnection.HTTP_ACCEPTED)) {
+            if (!Objects.equals(connection.getResponseCode(), HttpURLConnection.HTTP_OK)) {
                 inputStream = connection.getErrorStream();
             } else {
                 inputStream = connection.getInputStream();
