@@ -1,9 +1,7 @@
 package com.jenson.tool.http.entity;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.jenson.tool.entity.Result;
 import lombok.Getter;
 import lombok.Setter;
 

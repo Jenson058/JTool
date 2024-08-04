@@ -1,4 +1,4 @@
-package com.jenson.tool.entity;
+package com.jenson.tool.base;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
